@@ -27,21 +27,18 @@ ASpawnVolume::ASpawnVolume()
 	ItemDataTable = nullptr;
 }
 
-void ASpawnVolume::SpawnRandomItem()
+AActor* ASpawnVolume::SpawnRandomItem()
 {
-	// 랜덤 아이템 선택
-	FItemSpawnRow* SelectedRow = GetRandomItem();
-	if (!SelectedRow) return;
-
-	// 소프트 클래스 레퍼런스에서 실제 클래스 가져오기
-	UClass* ActualClass = SelectedRow->ItemClass.Get();
-	if (!ActualClass) return;
-
-	// 유효한 클래스가 있을 때만 스폰
-	if (ActualClass)
+	if (FItemSpawnRow* SelectedRow = GetRandomItem())
 	{
-		SpawnItem(ActualClass);
+		if (UClass* ActualClass = SelectedRow->ItemClass.Get())
+		{
+			// 여기서 SpawnItem()을 호출하고, 스폰된 AActor 포인터를 리턴
+			return SpawnItem(ActualClass);
+		}
 	}
+
+	return nullptr;
 }
 
 FItemSpawnRow* ASpawnVolume::GetRandomItem() const
@@ -92,22 +89,16 @@ FVector ASpawnVolume::GetRandomPointInVolume() const
 	);
 }
 
-void ASpawnVolume::SpawnItem(TSubclassOf<AActor> ItemClass)
+AActor* ASpawnVolume::SpawnItem(TSubclassOf<AActor> ItemClass)
 {
-	// 유효하지 않은 클래스면 스폰하지 않음
-	if (!ItemClass) return;
+	if (!ItemClass) return nullptr;
 
-	// 월드가 유효한지 확인
-	UWorld* World = GetWorld();
-	if (!World) return;
-
-	// 랜덤 위치 계산
-	const FVector SpawnLocation = GetRandomPointInVolume();
-
-	// 액터 스폰
-	World->SpawnActor<AActor>(
+	// SpawnActor가 성공하면 스폰된 액터의 포인터가 반환됨
+	AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(
 		ItemClass,
-		SpawnLocation,
+		GetRandomPointInVolume(),
 		FRotator::ZeroRotator
 	);
+
+	return SpawnedActor;
 }
