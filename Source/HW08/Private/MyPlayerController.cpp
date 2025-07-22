@@ -74,9 +74,11 @@ void AMyPlayerController::ShowMainMenu(bool bIsRestart)
 	}
 	
 	// 메뉴 UI 생성
+	check(MainMenuWidgetClass);
 	if (MainMenuWidgetClass)
 	{		
 		MainMenuWidgetInstance = CreateWidget<UUserWidget>(this, MainMenuWidgetClass);
+		check(MainMenuWidgetInstance);
 		if (MainMenuWidgetInstance)
 		{
 			MainMenuWidgetInstance->AddToViewport();
