@@ -2,7 +2,7 @@
 
 
 #include "CoinItem.h"
-#include "MyGameStateBase.h"
+#include "MyGameState.h"
 
 ACoinItem::ACoinItem()
 {
@@ -18,7 +18,7 @@ void ACoinItem::ActivateItem(AActor* Activator)
 	{
 		if (UWorld* World = GetWorld())
 		{
-			if (AMyGameStateBase* GameState = World->GetGameState<AMyGameStateBase>())
+			if (AMyGameState* GameState = World->GetGameState<AMyGameState>())
 			{
 				GameState->AddScore(PointValue);
 				GameState->OnCoinCollected();
