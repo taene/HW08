@@ -2,6 +2,7 @@
 
 
 #include "CoinItem.h"
+#include "MyGameStateBase.h"
 
 ACoinItem::ACoinItem()
 {
@@ -15,6 +16,14 @@ void ACoinItem::ActivateItem(AActor* Activator)
 
 	if (Activator && Activator->ActorHasTag("Player"))
 	{
+		if (UWorld* World = GetWorld())
+		{
+			if (AMyGameStateBase* GameState = World->GetGameState<AMyGameStateBase>())
+			{
+				GameState->AddScore(PointValue);
+			}
+		}
+		
 		DestroyItem();
 	}
 }
