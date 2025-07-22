@@ -37,7 +37,6 @@ void ABaseItem::OnItemOverlap(UPrimitiveComponent* OverlappedComp, AActor* Other
 	// OtherActor가 플레이어인지 확인 ("Player" 태그 활용)
 	if (OtherActor && OtherActor->ActorHasTag("Player"))
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, FString::Printf(TEXT("Overlap!!!")));
 		// 아이템 사용 (획득) 로직 호출
 		ActivateItem(OtherActor);
 	}
